@@ -10,6 +10,7 @@ module.list("fluent_functions", desc="fluent functions")
 module.list("fluent_types", desc="fluent types")
 module.list("fluent_values", desc="fluent values")
 module.list("fluent_modules", desc="fluent modules")
+module.list("fluent_opterators", desc="fluent opterators")
 
 DEFAULT_OPERATORS = {
     "plus": "+",
@@ -25,7 +26,6 @@ DEFAULT_OPERATORS = {
     "logical and": "&&",
     "logical or": "||",
 }
-module.list("fluent_opterators", desc="fluent opterators")
 context.lists["user.fluent_opterators"] = DEFAULT_OPERATORS
 
 

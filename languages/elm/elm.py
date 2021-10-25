@@ -1,12 +1,12 @@
 
 from talon import Context, Module, actions, settings, ctrl
-from ..fluent import DEFAULT_OPERATORS
+from ...fluent import DEFAULT_OPERATORS
 
 module = Module()
 context = Context()
 context.matches = r"""
 mode: user.elm
-mode: command
+mode: user.auto_lang
 and code.language: elm
 """
 
@@ -48,12 +48,12 @@ def fluent_type(m) -> str: return m
 
 
 @module.capture(rule="{user.fluent_types}+")
-def elm_complex_type(m) -> str: return " ".join(m.fluent_type_list)
+def elm_complex_type(m) -> str: return " ".join(m.fluent_types_list)
 
 
 @module.capture(rule="{user.fluent_types} [to {user.fluent_types}]*")
 def function_type(m) -> str:
-    return " -> ".join(m.fluent_types)
+    return " -> ".join(m.fluent_types_list)
 
 
 @module.capture(rule="<user.record_type_entry> [and <user.record_type_entry>]*")
