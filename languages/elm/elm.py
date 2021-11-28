@@ -1,6 +1,6 @@
 
 from talon import Context, Module, actions, settings, ctrl
-from ...fluent import DEFAULT_OPERATORS
+from ...fluent import DEFAULT_OPERATORS, sep1
 
 module = Module()
 context = Context()
@@ -34,35 +34,52 @@ context.lists["user.fluent_types"] = {
     "dictionary": "Dict",
     "set": "Set",
     "result": "Result",
+    # Common
+    "model": "Model",
+    "message": "Msg",
 }
 
-
-context.lists["user.fluent_opterators"] = DEFAULT_OPERATORS | {
-    "pipe right": "|>",
-    "pipe left": "<|"
+context.lists["user.fluent_functions"] = {
+    "print": 'Debug.log "" ',
+    "filter": "filter",
+    "map": "map",
+    "and then": "andThen",
+    "with default": "Maybe.withDefault",
 }
 
+context.lists["user.fluent_operators"] = DEFAULT_OPERATORS | {
+    "piper": "|>",
+    "compr": ">>",
+    "apply": "<|",
+    "compose": "<<",
+    "p skip": "|.",
+    "p keep": "|=",
+    "route join": "</>",
+}
 
-@context.capture(rule="(<user.function_type>|rec <user.record_type>|<user.elm_complex_type>)")
+# type captures
+
+
+@context.capture(rule="<user.elm_function_type>")
 def fluent_type(m) -> str: return m
 
 
-@module.capture(rule="{user.fluent_types}+")
-def elm_complex_type(m) -> str: return " ".join(m.fluent_types_list)
+@module.capture(rule=sep1('<user.elm_complex_type>', 'to'))
+def elm_function_type(m) -> str:
+    return " -> ".join(m.elm_complex_type_list)
 
 
-@module.capture(rule="{user.fluent_types} [to {user.fluent_types}]*")
-def function_type(m) -> str:
-    return " -> ".join(m.fluent_types_list)
+@module.capture(rule="({user.fluent_types}|<user.letter>)+")
+def elm_complex_type(m) -> str: return " ".join(list(m))
 
 
-@module.capture(rule="<user.record_type_entry> [and <user.record_type_entry>]*")
+@module.capture(rule=sep1('<user.record_type_entry>'))
 def record_type(m) -> str:
     return "{ " + ', '.join(m.record_type_entry_list) + " }"
 
 
 @module.capture(rule="<user.text> [and <user.text>]* [of [{user.fluent_types}]]")
 def record_type_entry(m) -> str:
-    return ", ".join(f"{t} :: {getattr(m, 'type', ' ')}" for t in m.text_list)
+    return ", ".join(f"{t} : {getattr(m, 'fluent_types', 'undefined')}" for t in m.text_list)
 
 

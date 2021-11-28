@@ -10,15 +10,15 @@ module.list("fluent_functions", desc="fluent functions")
 module.list("fluent_types", desc="fluent types")
 module.list("fluent_values", desc="fluent values")
 module.list("fluent_modules", desc="fluent modules")
-module.list("fluent_opterators", desc="fluent opterators")
+module.list("fluent_operators", desc="fluent opterators")
 
 DEFAULT_OPERATORS = {
     "plus": "+",
     "minus": "-",
     "times": "*",
     "mod": "%",
-    "equals": "==",
-    "not equals": "!=",
+    "is equal": "==",
+    "not equal": "!=",
     "greater than": ">",
     "greater equals": ">=",
     "lesser equals": "<=",
@@ -26,7 +26,7 @@ DEFAULT_OPERATORS = {
     "logical and": "&&",
     "logical or": "||",
 }
-context.lists["user.fluent_opterators"] = DEFAULT_OPERATORS
+context.lists["user.fluent_operators"] = DEFAULT_OPERATORS
 
 
 def sep1(capture: str, sep: str = "and"):
@@ -72,9 +72,9 @@ def fluent_symbol(m) -> str: return m
 def fluent_complex_literal_expression(m) -> str: return m
 
 
-@module.capture(rule=f"list [of] {sep1('<user.fluent_expression_base>')}")
+@module.capture(rule=f"list of {sep1('<user.fluent_expression_base>')}")
 def fluent_list_literal(m) -> str:
-    return "[" + ",".join(m.fluent_expression_base) + "]"
+    return "[" + ",".join(m.fluent_expression_base_list) + "]"
 
 
 @module.capture(rule="string [of] <user.text>")
