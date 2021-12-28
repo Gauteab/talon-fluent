@@ -1,7 +1,7 @@
-title: /LinuxVDI/i
-mode: user.elm
+# title: /LinuxVDI/i
+mode: user.haskell
 mode: user.auto_lang
-and code.language: elm
+and code.language: haskell
 -
 settings():
     user.code_private_function_formatter = "PRIVATE_CAMEL_CASE"

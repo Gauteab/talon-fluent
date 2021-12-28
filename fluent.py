@@ -85,10 +85,10 @@ def fluent_string_literal(m) -> str: return f'"{m.text}"'
 def fluent_expression_base(m) -> str: return m
 
 
-@module.capture(rule="<user.text>")
+@module.capture(rule="(<user.text>|<user.letters>)")
 def fluent_var_name(m) -> str:
     formatter = settings.get("user.code_private_function_formatter")
-    return actions.user.formatted_text(m.text, formatter)
+    return actions.user.formatted_text(m[0], formatter)
 
 
 @module.action_class
